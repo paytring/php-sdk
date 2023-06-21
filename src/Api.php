@@ -44,6 +44,10 @@ class Api
             $body['currency'] = $paymentData['currency'] ?? "INR";
         }
 
+        if ( isset($paymentData['pg_pool_id']) && !empty($paymentData['pg_pool_id']) ) {
+            $body['pg_pool_id'] = $paymentData['pg_pool_id'];
+        }
+
         if (count($billingAddress)) {
             $body['billing_address'] = $billingAddress;
         }
@@ -77,6 +81,19 @@ class Api
         $body['hash'] = $this->createHash($body);
 
         return $this->POST($this->api . 'order/fetch', $body);
+    }
+
+    public function FetchReceipt($id)
+    {
+
+        $body = [
+            'id' => $id,
+            'key' => $this->key,
+        ];
+
+        $body['hash'] = $this->createHash($body);
+
+        return $this->POST( $this->api.'order/fetch/receipt', $body );
     }
 
     public function createHash($params)
